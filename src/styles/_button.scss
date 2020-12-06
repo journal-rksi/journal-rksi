@@ -1,0 +1,32 @@
+button {
+  max-width: 100%
+}
+
+.btn {
+  max-width: 100%;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 17px 40px;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  -webkit-transition: background 0.2s linear;
+  -o-transition: background 0.2s linear;
+  transition: background 0.2s linear;
+  background-color: #58BFE8
+}
+
+.btn:hover {
+  background: #121236
+}
+
+.btn.btn-grid {
+  margin: 0 auto;
+  padding: 17px 32px
+}
+
+.btn.btn-services {
+  padding: 17px 16px;
+  font-size: 20px
+}
+

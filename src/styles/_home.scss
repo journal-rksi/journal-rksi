@@ -1,0 +1,38 @@
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .home-card {
+    display: flex;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    height: 350px;
+    width: 450px;
+    border: 1px solid $black;
+
+    .home-header {
+      height: 50px;
+      background: $black;
+      padding: 15px 25px;
+      color: $white;
+
+    }
+
+    .label {
+      color: $black;
+    }
+
+    .home-content {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 25px;
+    }
+
+    & + & {
+      margin-left: 20px;
+    }
+  }
+}
