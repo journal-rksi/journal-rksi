@@ -54,7 +54,7 @@ const SheetPage = () => {
   const [currentSubject, setCurrentSubject] = useState(subjects?.[0].id);
   const [currentGroup, setCurrentGroup] = useState(groups?.[0].id);
 
-  const { group, subject, students, marks, loading } = useSubject({
+  const { students, marks, loading } = useSubject({
     groupId: currentGroup || 'none',
     subjectId: currentSubject || 'none',
     date_gte: new Date().toISOString(),

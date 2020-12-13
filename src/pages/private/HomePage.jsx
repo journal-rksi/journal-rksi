@@ -1,7 +1,5 @@
 import React from 'react';
 
-// import { Link } from 'react-router-dom';
-
 import HomeCard from 'components/common/HomeCard';
 
 import useGroups from 'hooks/useGroups';

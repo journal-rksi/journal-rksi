@@ -72,7 +72,6 @@ const lastNames = [
   'Даненко',
 ];
 const groupNames = ['ПОКС', 'ИБ', 'ИБТ', 'ИБА', 'МТ', 'КС'];
-const markValues = [null, 2, 3, 4, 5];
 
 const randomName = () =>
   `${names[Math.round(Math.random() * (names.length - 1))]} ${
@@ -84,9 +83,10 @@ const subjects = subjectNames.map(name => ({
   id: genId('sb'),
   name,
 }));
-const students = [];
 const groups = [];
 const marks = [];
+const students = [];
+const teachers = [];
 
 groupNames.forEach(name => {
   for (let i = 1; i <= 4; i++) {
@@ -108,37 +108,38 @@ groupNames.forEach(name => {
 groups.forEach(({ id: groupId }) => {
   const population = Math.random() * 10 + 20;
 
+  teachers.push(
+    (() => {
+      const id = genId('tc');
+
+      return {
+        id,
+        role: ['teacher'],
+        name: randomName(),
+        login: id,
+        password: 'pswd_dev',
+        subject: subjects[Math.ceil(Math.random() * subjects.length - 1)].id,
+        relations: {
+          groups: [groupId],
+        },
+      };
+    })(),
+  );
+
   for (let i = 0; i < population; i++) {
     students.push({
       id: genId('st'),
+      role: ['student'],
       name: randomName(),
-      group: groupId,
+      relations: {
+        groups: [groupId],
+      },
     });
   }
 });
 
-students.forEach(student => {
-  const groupsSubjects = groups.find(({ id }) => student.group === id).subjects;
-
-  groupsSubjects.forEach(subj => {
-    for (let month = 12; month <= 12; month++) {
-      for (let tries = 0; tries <= 5; tries++) {
-        const day = Math.ceil(Math.random() * 31);
-        const date = new Date(`${`0${month}`.slice(-2)}/${`0${day}`.slice(-2)}/2020`).toISOString();
-
-        marks.push({
-          date,
-          mark: markValues[Math.round(Math.random() * (markValues.length - 1))],
-          student: student.id,
-          subject: groupsSubjects[Math.round(Math.random() * (groupsSubjects.length - 1))],
-        });
-      }
-    }
-  });
-});
-
 const db = {
-  students,
+  users: [...students, ...teachers],
   groups,
   subjects,
   marks,
