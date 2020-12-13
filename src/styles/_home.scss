@@ -2,6 +2,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  max-width: 1600px;
+  height: 100vh;
 
   .home-card {
     display: flex;
@@ -11,6 +16,7 @@
     height: 350px;
     width: 450px;
     border: 1px solid $black;
+    margin: 10px;
 
     .home-header {
       height: 50px;
@@ -29,10 +35,6 @@
       flex-direction: column;
       align-items: stretch;
       padding: 25px;
-    }
-
-    & + & {
-      margin-left: 20px;
     }
   }
 }

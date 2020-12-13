@@ -15,15 +15,8 @@ export const Marks = {
 };
 
 export const RolesEnum = {
-  Admin: 0,
-  Curator: 1,
-  Teacher: 2,
-  Student: 3,
-};
-
-export const Roles = {
-  [RolesEnum.Admin]: 'admin',
-  [RolesEnum.Curator]: 'curator',
-  [RolesEnum.Teacher]: 'teacher',
-  [RolesEnum.Student]: 'student',
+  Admin: 'admin',
+  Curator: 'curator',
+  Teacher: 'teacher',
+  Student: 'student',
 };

@@ -1,28 +1,38 @@
-import React from 'react';
+import React, { Fragment, useCallback } from 'react';
 
-import HomeCard from 'components/common/HomeCard';
+import SubjectsCard from 'components/home/SubjectsCard';
+import TeachersCard from 'components/home/TeachersCard';
+import GroupsCard from 'components/home/GroupsCard';
+import JournalCard from 'components/home/JournalCard';
+import AbsenceCard from 'components/home/AbsenceCard';
 
-import useGroups from 'hooks/useGroups';
+import useUser from 'hooks/useUser';
+
+import { RolesEnum } from 'helpers/constants';
 
 const HomePage = () => {
-  const groups = useGroups();
+  const { me } = useUser();
+  const role = me?.role;
+
+  const CardsToShow = useCallback(() => {
+    if (role?.includes(RolesEnum.Admin)) {
+      return (
+        <Fragment>
+          <SubjectsCard />
+          <TeachersCard />
+          <GroupsCard />
+        </Fragment>
+      );
+    }
+
+    return null;
+  }, [role]);
 
   return (
     <div className="page home">
-      <HomeCard label="Пропуски">
-        <label className="label" htmlFor="group">
-          Группа
-        </label>
-        <select name="group" id="group">
-          {JSON.stringify(groups)}
-          {groups?.map(({ name, id }) => (
-            <option key={id} value={id}>
-              {name}
-            </option>
-          ))}
-        </select>
-      </HomeCard>
-      <HomeCard label="Оценки">ffsdff</HomeCard>
+      <CardsToShow />
+      <JournalCard />
+      <AbsenceCard />
     </div>
   );
 };

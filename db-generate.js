@@ -88,6 +88,14 @@ const marks = [];
 const students = [];
 const teachers = [];
 
+const admin = {
+  id: 'admin',
+  login: 'admin',
+  name: 'Администратор',
+  role: ['admin'],
+  password: 'admin_dev',
+};
+
 groupNames.forEach(name => {
   for (let i = 1; i <= 4; i++) {
     for (let k = 1; k <= 4; k++) {
@@ -139,7 +147,7 @@ groups.forEach(({ id: groupId }) => {
 });
 
 const db = {
-  users: [...students, ...teachers],
+  users: [...students, ...teachers, admin],
   groups,
   subjects,
   marks,

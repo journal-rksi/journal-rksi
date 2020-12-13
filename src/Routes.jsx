@@ -3,15 +3,15 @@ import React, { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import HomePage from 'pages/private/HomePage';
-import SheetPage from 'pages/private/SheetPage';
+import SheetPage from 'pages/public/SheetPage';
 import LoginPage from 'pages/public/LoginPage';
 
 import useUser from 'hooks/useUser';
 
 const Routes = () => {
-  const { me } = useUser();
+  const { authorize } = useUser();
 
-  useEffect(() => me(), []);
+  useEffect(() => authorize(), []);
 
   return (
     <Switch>
