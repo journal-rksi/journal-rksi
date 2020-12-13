@@ -41,6 +41,8 @@ const useUser = () => {
         localStorage.setItem('token', `${id}::${password}`);
 
         push('/');
+
+        setMe(user);
       } else {
         alert('Неверный логин или пароль');
       }
