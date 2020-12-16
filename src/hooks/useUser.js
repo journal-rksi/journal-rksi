@@ -33,8 +33,6 @@ const useUser = () => {
     axios(createQuery(queryString.stringify({ login, password }), '/users')).then(({ data }) => {
       const user = data?.[0];
 
-      console.log(data);
-
       if (user) {
         const { id, password } = user;
 

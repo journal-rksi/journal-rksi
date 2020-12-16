@@ -1,9 +1,11 @@
-import useAxios from 'axios-hooks';
+import { useContext } from 'react';
+
+import { AxiosContext } from 'providers/AxiosProvider';
 
 const useGroups = () => {
-  const [{ data }] = useAxios(`${process.env.REACT_APP_API_URL}/groups`);
+  const { groups, refetchGroups } = useContext(AxiosContext);
 
-  return data;
+  return { groups, refetchGroups };
 };
 
 export default useGroups;

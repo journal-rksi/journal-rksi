@@ -2,8 +2,8 @@ import React, { Fragment, useCallback } from 'react';
 
 import SubjectsCard from 'components/home/SubjectsCard';
 import TeachersCard from 'components/home/TeachersCard';
-import GroupsCard from 'components/home/GroupsCard';
-import JournalCard from 'components/home/JournalCard';
+import GroupsCard from 'components/group/GroupsCard';
+import JournalCard from 'components/journal/JournalCard';
 import AbsenceCard from 'components/home/AbsenceCard';
 
 import useUser from 'hooks/useUser';
