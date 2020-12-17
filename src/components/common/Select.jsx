@@ -62,7 +62,12 @@ const Select = ({ options, onChange, onAdd, name, label, value, addLabel = 'До
             </div>
           )}
           {options?.map(({ label, value }) => (
-            <div role="button" key={label} className="select-option" onMouseDown={() => handleSelect(value)}>
+            <div
+              role="button"
+              key={`${label}-${value}`}
+              className="select-option"
+              onMouseDown={() => handleSelect(value)}
+            >
               {label}
             </div>
           ))}

@@ -1,21 +1,35 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import HomeCard from 'components/home/HomeCard';
-import GroupsSelect from 'components/group/GroupSelect';
-import Form from 'components/common/Form';
+import MutableList from 'components/common/MutableList';
 
-const fields = [
-  {
-    name: 'group',
-    component: <GroupsSelect />,
-    required: true,
-  },
-];
+import useGroups from 'hooks/useGroups';
+import useTeachers from 'hooks/useTeachers';
 
 const GroupsCard = () => {
+  const { groups, refetchGroups } = useGroups();
+  const { teachers } = useTeachers();
+
+  const items = useMemo(
+    () =>
+      groups?.map(({ name, id, curator }) => {
+        const curatorName = teachers?.find(({ id }) => id === curator)?.name;
+
+        const label = `${name} ${curatorName ? `(${curatorName})` : ''}`;
+        return { label, value: id };
+      }),
+    [groups, teachers],
+  );
+
   return (
     <HomeCard label="Группы">
-      <Form fields={fields} onSubmit={console.log} />
+      <MutableList
+        items={items}
+        collectionName="groups"
+        editModalName="EditGroup"
+        createModalName="CreateGroup"
+        refetch={refetchGroups}
+      />
     </HomeCard>
   );
 };

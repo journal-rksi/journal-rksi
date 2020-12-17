@@ -1,8 +1,9 @@
 .modal {
+  box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
-  padding-top: 60px;
+  padding: 60px 0;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -24,6 +25,9 @@
     background-color: $white;
     height: fit-content;
     border-radius: 5px;
+    padding: 20px;
+    padding-bottom: 30px;
+    width: 400px;
 
     .modal-header {
       display: flex;

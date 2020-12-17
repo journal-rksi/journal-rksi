@@ -1,10 +1,13 @@
 import React, { Fragment, useCallback } from 'react';
 
-import SubjectsCard from 'components/home/SubjectsCard';
-import TeachersCard from 'components/home/TeachersCard';
+import SubjectsCard from 'components/subject/SubjectsCard';
+import TeachersCard from 'components/teacher/TeachersCard';
 import GroupsCard from 'components/group/GroupsCard';
 import JournalCard from 'components/journal/JournalCard';
 import AbsenceCard from 'components/home/AbsenceCard';
+import CreateSubject from 'components/subject/CreateSubject';
+import CreateGroup from 'components/group/CreateGroup';
+import CreateTeacher from 'components/teacher/CreateTeacher';
 
 import useUser from 'hooks/useUser';
 
@@ -33,6 +36,9 @@ const HomePage = () => {
       <CardsToShow />
       <JournalCard />
       <AbsenceCard />
+      <CreateSubject />
+      <CreateTeacher />
+      <CreateGroup />
     </div>
   );
 };

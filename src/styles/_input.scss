@@ -1,0 +1,26 @@
+.input {
+  .input-label {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .input-field {
+    padding: 10px;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid $gray;
+    transition: .2s ease;
+    background-color: $gray-light;
+    color: $black;
+    margin-bottom: 10px;
+    width: 100%;
+
+    &::empty {
+      background-color: $gray;
+    }
+
+    &:focus {
+      background-color: $gray-light;
+    }
+  }
+}

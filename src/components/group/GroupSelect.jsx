@@ -1,7 +1,6 @@
-import React, { Fragment, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import Select from 'components/common/Select';
-import CreateGroup from 'components/group/CreateGroup';
 
 import useModal from 'hooks/useModal';
 import useGroups from 'hooks/useGroups';
@@ -22,12 +21,7 @@ const GroupSelect = props => {
 
   if (!options) return null;
 
-  return (
-    <Fragment>
-      <Select options={options} label="Дисциплина" addLabel="Добавить дисциплину" onAdd={open} {...props} />
-      <CreateGroup />
-    </Fragment>
-  );
+  return <Select options={options} label="Группа" addLabel="Добавить группу" onAdd={open} {...props} />;
 };
 
 export default GroupSelect;

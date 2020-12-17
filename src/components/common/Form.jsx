@@ -47,14 +47,16 @@ const Form = ({
   return (
     <form className={classnames('form', className)} onSubmit={preventSubmit}>
       <div className="form-fields">
-        {fields.map(({ name, component, type, required }) =>
-          cloneElement(component, {
-            required,
-            name,
-            key: name,
-            onChange: handleChange,
-            value: form[name] || getDefaultValue(type),
-          }),
+        {fields.map(({ name, component, type, required, condition = () => true }) =>
+          condition(form)
+            ? cloneElement(component, {
+                required,
+                name,
+                key: name,
+                onChange: handleChange,
+                value: form[name] || getDefaultValue(type),
+              })
+            : null,
         )}
       </div>
       <div className={classnames('form-actions', actionClassName)}>

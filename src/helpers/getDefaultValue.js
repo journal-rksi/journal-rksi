@@ -4,6 +4,8 @@ const getDefaultValue = type => {
       return '';
     case 'number':
       return 0;
+    case 'multiselect':
+      return [];
     default:
       return null;
   }

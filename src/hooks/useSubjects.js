@@ -1,11 +1,11 @@
-import useAxios from 'axios-hooks';
+import { useContext } from 'react';
 
-import createQuery from 'helpers/createQuery';
+import { AxiosContext } from 'providers/AxiosProvider';
 
 const useSubjects = () => {
-  const [{ data }] = useAxios(createQuery('', '/subjects'));
+  const { subjects, refetchSubjects } = useContext(AxiosContext);
 
-  return data;
+  return { subjects, refetchSubjects };
 };
 
 export default useSubjects;
