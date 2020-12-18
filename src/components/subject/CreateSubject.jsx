@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import queryString from 'query-string';
 
 import Modal from 'components/common/Modal';
 import Form from 'components/common/Form';
@@ -24,20 +25,44 @@ const fields = [
 ];
 
 const CreateSubject = () => {
-  const { close } = useModal();
+  const { close, context } = useModal();
 
   const { refetchSubjects } = useSubjects();
 
+  const [initialValues, setInitialValues] = useState(null);
+
+  const fetchGroup = () => {
+    return axios
+      .get(createQuery(queryString.stringify({ id: context.id }), '/subjects'))
+      .then(({ data }) => setInitialValues(data?.[0]));
+  };
+
   const handleSubmit = values => {
+    if (context?.id) {
+      return axios.patch(createQuery('', `/subjects/${context.id}`), values).then(() => {
+        close();
+        fetchGroup();
+        refetchSubjects();
+      });
+    }
+
     return axios.post(createQuery('', '/subjects'), values).then(() => {
-      refetchSubjects();
       close();
+      refetchSubjects();
     });
   };
 
+  useEffect(() => {
+    if (context?.id) {
+      fetchGroup();
+    }
+  }, [context?.id]);
+
+  if (context?.id && !initialValues) return null;
+
   return (
-    <Modal className="create-subject" name="CreateSubject" label="Создать дисциплину">
-      <Form fields={fields} onSubmit={handleSubmit} />
+    <Modal className="create-subject" name="CreateSubject" label={context.label}>
+      <Form initialValues={initialValues} fields={fields} onSubmit={handleSubmit} />
     </Modal>
   );
 };

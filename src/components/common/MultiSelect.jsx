@@ -37,7 +37,7 @@ const MultiSelect = ({ value, options, limit, name, label, onChange }) => {
       <div className="multi-select-options">
         {options.map(({ label, value }) => (
           <button
-            key={`${name}-${label}`}
+            key={`${label}-${value}`}
             onClick={() => handleSelect(value)}
             disabled={
               selectedOptions.length >= limit &&

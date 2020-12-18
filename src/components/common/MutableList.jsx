@@ -3,11 +3,7 @@ import axios from 'axios';
 
 import Input from 'components/common/Input';
 
-import useModal from 'hooks/useModal';
-
-const MutableList = ({ items, editModalName, createModalName, collectionName, refetch }) => {
-  const { open: openCreate } = useModal(createModalName);
-
+const MutableList = ({ items, onEdit, onAdd, collectionName, refetch }) => {
   const [search, setSearch] = useState('');
 
   const filteredItems = useMemo(() => items?.filter(({ label }) => new RegExp(search, 'gi').test(label)), [
@@ -32,7 +28,7 @@ const MutableList = ({ items, editModalName, createModalName, collectionName, re
         <div className="search">
           <Input label="Поиск" value={search} onChange={({ value }) => setSearch(value)} />
         </div>
-        <button onClick={openCreate} className="create-item">
+        <button onClick={onAdd} className="create-item">
           Добавить элемент
         </button>
       </div>
@@ -40,6 +36,9 @@ const MutableList = ({ items, editModalName, createModalName, collectionName, re
         <div className="list-item" key={`${label}-${value}`}>
           <div className="item-name">{label}</div>
           <div className="item-actions">
+            <button onClick={() => onEdit(value)} className="item-action edit-item">
+              Изменить
+            </button>
             <button onClick={() => onDelete(value, label)} className="item-action delete-item">
               &times;
             </button>

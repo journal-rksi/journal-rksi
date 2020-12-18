@@ -21,7 +21,15 @@ const GroupSelect = props => {
 
   if (!options) return null;
 
-  return <Select options={options} label="Группа" addLabel="Добавить группу" onAdd={open} {...props} />;
+  return (
+    <Select
+      options={options}
+      label="Группа"
+      addLabel="Добавить группу"
+      onAdd={() => open({ label: 'Добавить группу' })}
+      {...props}
+    />
+  );
 };
 
 export default GroupSelect;

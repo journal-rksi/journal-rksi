@@ -3,10 +3,12 @@ import React, { useMemo } from 'react';
 import HomeCard from 'components/home/HomeCard';
 import MutableList from 'components/common/MutableList';
 
+import useModal from 'hooks/useModal';
 import useGroups from 'hooks/useGroups';
 import useTeachers from 'hooks/useTeachers';
 
 const GroupsCard = () => {
+  const { open } = useModal('CreateGroup');
   const { groups, refetchGroups } = useGroups();
   const { teachers } = useTeachers();
 
@@ -21,14 +23,17 @@ const GroupsCard = () => {
     [groups, teachers],
   );
 
+  const handleEdit = id => open({ id, label: 'Редактировать группу' });
+  const handleAdd = () => open({ label: 'Добавить группу' });
+
   return (
     <HomeCard label="Группы">
       <MutableList
         items={items}
         collectionName="groups"
-        editModalName="EditGroup"
-        createModalName="CreateGroup"
         refetch={refetchGroups}
+        onEdit={handleEdit}
+        onAdd={handleAdd}
       />
     </HomeCard>
   );

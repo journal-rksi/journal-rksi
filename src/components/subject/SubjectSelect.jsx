@@ -21,7 +21,15 @@ const SubjectSelect = props => {
 
   if (!options) return null;
 
-  return <Select options={options} label="Дисциплина" addLabel="Добавить дисциплину" onAdd={open} {...props} />;
+  return (
+    <Select
+      options={options}
+      label="Дисциплина"
+      addLabel="Добавить дисциплину"
+      onAdd={() => open({ label: 'Добавить дисциплину' })}
+      {...props}
+    />
+  );
 };
 
 export default SubjectSelect;

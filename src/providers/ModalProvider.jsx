@@ -4,6 +4,7 @@ export const ModalContext = createContext({});
 
 const ModalProvider = ({ children }) => {
   const [activeModal, setActiveModal] = useState(null);
+  const [context, setContext] = useState(null);
 
   const openModal = modalName => setActiveModal(modalName);
   const closeModal = () => setActiveModal(null);
@@ -14,6 +15,8 @@ const ModalProvider = ({ children }) => {
         activeModal,
         openModal,
         closeModal,
+        context,
+        setContext,
       }}
     >
       {children}

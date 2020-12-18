@@ -13,10 +13,11 @@ const Form = ({
   onSubmit,
   actionClassName,
   className,
+  initialValues,
 }) => {
   const { close } = useModal();
 
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState(initialValues || {});
 
   const preventSubmit = e => e.preventDefault();
 
