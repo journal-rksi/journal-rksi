@@ -59,8 +59,10 @@ const CreateGroup = () => {
   };
 
   useEffect(() => {
-    if (context?.id) {
+    if (context.id) {
       fetchGroup();
+    } else {
+      setInitialValues(null);
     }
   }, [context?.id]);
 

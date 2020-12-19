@@ -5,9 +5,12 @@ import TeachersCard from 'components/teacher/TeachersCard';
 import GroupsCard from 'components/group/GroupsCard';
 import JournalCard from 'components/journal/JournalCard';
 import AbsenceCard from 'components/home/AbsenceCard';
+import StudentsCard from 'components/student/StudentsCard';
+
 import CreateSubject from 'components/subject/CreateSubject';
 import CreateGroup from 'components/group/CreateGroup';
 import CreateTeacher from 'components/teacher/CreateTeacher';
+import CreateStudent from 'components/student/CreateStudent';
 
 import useUser from 'hooks/useUser';
 
@@ -24,6 +27,7 @@ const HomePage = () => {
           <SubjectsCard />
           <TeachersCard />
           <GroupsCard />
+          <StudentsCard />
         </Fragment>
       );
     }
@@ -38,6 +42,7 @@ const HomePage = () => {
       <AbsenceCard />
       <CreateSubject />
       <CreateTeacher />
+      <CreateStudent />
       <CreateGroup />
     </div>
   );

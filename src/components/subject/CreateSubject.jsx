@@ -5,22 +5,18 @@ import queryString from 'query-string';
 import Modal from 'components/common/Modal';
 import Form from 'components/common/Form';
 import Input from 'components/common/Input';
-import TeacherSelect from 'components/teacher/TeacherSelect';
 
 import useModal from 'hooks/useModal';
 import useSubjects from 'hooks/useSubjects';
 
 import createQuery from 'helpers/createQuery';
+import genId from 'helpers/genId';
 
 const fields = [
   {
     type: 'text',
     name: 'name',
     component: <Input type="text" placeholder="Основы некоторой деятельности ..." />,
-  },
-  {
-    name: 'teacher',
-    component: <TeacherSelect label="Преподаватель" role="teacher" />,
   },
 ];
 
@@ -46,7 +42,7 @@ const CreateSubject = () => {
       });
     }
 
-    return axios.post(createQuery('', '/subjects'), values).then(() => {
+    return axios.post(createQuery('', '/subjects'), { id: genId('sb'), ...values }).then(() => {
       close();
       refetchSubjects();
     });

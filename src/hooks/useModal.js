@@ -11,6 +11,7 @@ const useModal = modalName => {
     openModal(modalName);
     setContext(openContext);
   };
+
   const close = () => {
     closeModal(modalName);
     setContext(null);
@@ -21,6 +22,7 @@ const useModal = modalName => {
     open,
     close,
     context: context || {},
+    setContext,
   };
 };
 

@@ -11,6 +11,9 @@ const AxiosProvider = ({ children }) => {
   const [{ data: teachers }, refetchTeachers] = useAxios(
     `${process.env.REACT_APP_API_URL}/users?role_like=teacher&role_like=curator&_sort=name&_order=asc`,
   );
+  const [{ data: students }, refetchStudents] = useAxios(
+    `${process.env.REACT_APP_API_URL}/users?role_like=student&_sort=name&_order=asc`,
+  );
 
   return (
     <AxiosContext.Provider
@@ -21,6 +24,8 @@ const AxiosProvider = ({ children }) => {
         refetchSubjects,
         teachers,
         refetchTeachers,
+        students,
+        refetchStudents,
       }}
     >
       {children}
