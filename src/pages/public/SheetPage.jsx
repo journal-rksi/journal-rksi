@@ -61,7 +61,7 @@ const SheetPage = () => {
 
     if (me?.role.includes('admin')) return true;
 
-    if (sheet.teacher !== undefined && sheet.teacher === me?.id) return true;
+    if (sheet?.teacher !== undefined && sheet?.teacher === me?.id) return true;
 
     return false;
   }, [me, sheet]);
