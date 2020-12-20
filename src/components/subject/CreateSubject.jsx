@@ -51,6 +51,8 @@ const CreateSubject = () => {
   useEffect(() => {
     if (context?.id) {
       fetchGroup();
+    } else {
+      setInitialValues(null);
     }
   }, [context?.id]);
 
