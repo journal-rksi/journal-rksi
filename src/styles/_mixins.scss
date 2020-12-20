@@ -4,3 +4,14 @@
   outline: none;
   cursor: pointer;
 }
+
+@mixin table-cell {
+  background-color: $gray-light;
+  border-radius: 5px;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}

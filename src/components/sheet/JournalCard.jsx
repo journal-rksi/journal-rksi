@@ -1,4 +1,7 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+
+import queryString from 'query-string';
 
 import HomeCard from 'components/home/HomeCard';
 import Form from 'components/common/Form';
@@ -27,9 +30,18 @@ const fields = [
 ];
 
 const JournalCard = () => {
+  const { push } = useHistory();
+
+  const handleSubmit = value => {
+    const { group, year, month, subject } = value || {};
+    const date = `${year}-${month}`;
+
+    push('/sheet?' + queryString.stringify({ group, date, subject }));
+  };
+
   return (
     <HomeCard label="Оценки">
-      <Form fields={fields} onSubmit={console.log} />
+      <Form fields={fields} onSubmit={handleSubmit} />
     </HomeCard>
   );
 };

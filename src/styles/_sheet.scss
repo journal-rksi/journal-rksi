@@ -1,73 +1,53 @@
 .sheet {
-  display: flex;
-  flex-direction: column;;
-  align-items: center;
-  padding-top: 50px;
+  padding: 60px;
 
-  .sheet-container {
-    border: 1px solid $black;
-    min-height: 500px;
+  .table {
+    margin: 0 auto;
+    border-collapse: collapse;
 
-    .loading-message {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 20px;
-      height: 100%;
-      width: 100%;
+    .table-head {
+      background-color: $gray-light;
+      border-radius: 5px;
+      overflow: hidden;
     }
 
-    .title {
-      align-self: flex-start;
-      margin-bottom: 20px;
-    }
-  
-    .table {
-      border: 1px solid $black;
-      border-collapse: collapse;
-      font-size: 12px;
-      min-width: 110px;
-  
-      tr {
-        height: 24px;
-      }
-  
-      td, th {
-        padding: 0 2px;
-        border: 1px solid $black;
-        min-width: 24px;
-        font-size: 1em;
-        height: 24px;
-  
-        &.highlighted {
-          background-color: $highlightedcell;
+    .table-cell-container {
+      padding: 2px;
+      min-width: 50px;
+      height: 50px;
+      vertical-align: middle;
+      text-align: center;
+
+      .table-cell {
+        @include table-cell;
+
+        &.table-cell-name {
+          width: 200px;
+          justify-content: flex-start;
         }
-  
-        &.active {
-          background-color: $activecell;
+
+        &.table-mark {
+          border: none;
+          cursor: pointer;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          text-indent: 1px;
+          text-overflow: '';
+          text-align-last: center;
+          outline: none;
+
+          &:focus {
+            background-color: $highlightedcell;
+          }          
         }
-        
-        .name {
-          min-width: fit-content;
-          max-width: 200px;
-          height: 24px;
-        }
-  
-        &.mark-cell {
-          padding: 0;
-          max-width: 24px;
-          height: 24px;
-  
-          input {
-            max-height: 24px;
-            height: 24px;
-            max-width: 100%;
-            text-align: center;
-            border: none;
-            font-size: 1em;
-            box-sizing: border-box;
-            background: transparent;
-            outline: none;
+
+        &.error {
+          background-color: $error;
+          color: $white;
+          font-weight: bold;
+
+          &:focus {
+            background-color: darken($error, 5);
           }
         }
       }

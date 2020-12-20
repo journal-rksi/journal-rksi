@@ -24,6 +24,11 @@ const fields = [
   },
   {
     type: 'text',
+    name: 'login',
+    component: <Input label="Электронная почта" type="email" />,
+  },
+  {
+    type: 'text',
     name: 'password',
     component: <Input label="Пароль" type="password" />,
   },
@@ -42,7 +47,7 @@ const fields = [
     type: 'multiselect',
     name: 'groups',
     component: <GroupMultiSelect limit={8} label="Группы" />,
-    condition: form => form['role']?.includes('teacher'),
+    condition: form => form['role']?.includes('curator'),
   },
 ];
 

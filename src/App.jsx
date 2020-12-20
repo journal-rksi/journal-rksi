@@ -14,13 +14,13 @@ const App = () => {
 
   return (
     <Router>
-      <AxiosProvider>
-        <ModalProvider>
-          <UserContext.Provider value={{ me, setMe }}>
+      <UserContext.Provider value={{ me, setMe }}>
+        <AxiosProvider>
+          <ModalProvider>
             <Routes />
-          </UserContext.Provider>
-        </ModalProvider>
-      </AxiosProvider>
+          </ModalProvider>
+        </AxiosProvider>
+      </UserContext.Provider>
     </Router>
   );
 };

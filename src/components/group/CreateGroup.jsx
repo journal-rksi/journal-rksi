@@ -12,6 +12,7 @@ import useModal from 'hooks/useModal';
 import useGroups from 'hooks/useGroups';
 
 import createQuery from 'helpers/createQuery';
+import genId from 'helpers/genId';
 
 const fields = [
   {
@@ -52,7 +53,7 @@ const CreateGroup = () => {
       });
     }
 
-    return axios.post(createQuery('', '/groups'), values).then(() => {
+    return axios.post(createQuery('', '/groups'), { id: genId('gr'), ...values }).then(() => {
       close();
       refetchGroups();
     });

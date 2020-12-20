@@ -5,10 +5,10 @@ const Select = ({ options, onChange, onAdd, name, label, value, addLabel = 'До
 
   const selectRef = useRef(null);
 
-  const activeOptionValue = useMemo(() => (value ? value : options[0]?.value), [value]);
+  const activeOptionValue = useMemo(() => (value ? value : options?.[0]?.value), [value]);
 
   const activeOptionLabel = useMemo(
-    () => options.find(({ value: optionValue }) => activeOptionValue === optionValue)?.label,
+    () => options?.find(({ value: optionValue }) => activeOptionValue === optionValue)?.label,
     [value],
   );
 

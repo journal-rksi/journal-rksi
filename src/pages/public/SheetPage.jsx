@@ -1,165 +1,147 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 
+import axios from 'axios';
+import queryString from 'query-string';
 import classnames from 'classnames';
 
-import useSubject from 'hooks/useSubject';
+import MarkSelect from 'components/sheet/MarkSelect';
+
+import useUser from 'hooks/useUser';
 import useSubjects from 'hooks/useSubjects';
-import useGroups from 'hooks/useGroups';
+import useTeachers from 'hooks/useTeachers';
 
-const ITERATION_FILLER = '-------------------------------'.split('');
-
-const getCellValue = value => {
-  switch (value) {
-    case 'н':
-      return null;
-    case 2:
-      return 2;
-    case 3:
-      return 3;
-    case 4:
-      return 4;
-    case 5:
-      return 5;
-    default:
-      return undefined;
-  }
-};
-
-const highlightCell = (curPos, tarPos) => {
-  if (!curPos || !tarPos) return false;
-
-  const { x: curX, y: curY } = curPos;
-  const { x: tarX, y: tarY } = tarPos;
-
-  if (curX === tarX && curY < tarY) return true;
-  if (curX < tarX && curY === tarY) return true;
-
-  return false;
-};
-
-const activeCell = (curPos, tarPos) => {
-  if (!curPos || !tarPos) return false;
-
-  const { x: curX, y: curY } = curPos;
-  const { x: tarX, y: tarY } = tarPos;
-
-  return curX === tarX && curY === tarY;
-};
+import createQuery from 'helpers/createQuery';
+import { DAYS } from 'helpers/constants';
 
 const SheetPage = () => {
-  const subjects = useSubjects();
-  const groups = useGroups();
+  const { me } = useUser();
+  const { subjects } = useSubjects();
+  const { teachers } = useTeachers();
 
-  const [activeCellPosition, setActiveCellPosition] = useState(null);
-  const [currentSubject, setCurrentSubject] = useState(subjects?.[0].id);
-  const [currentGroup, setCurrentGroup] = useState(groups?.[0].id);
+  const [notFound, setNotFound] = useState(false);
+  const [sheet, setSheet] = useState(null);
+  const [students, setStudents] = useState([]);
 
-  const { students, marks, loading } = useSubject({
-    groupId: currentGroup || 'none',
-    subjectId: currentSubject || 'none',
-    date_gte: new Date().toISOString(),
-  });
+  const query = useLocation().search;
+  const { group, subject, date } = useMemo(() => queryString.parse(query), []);
 
-  const handleFocus = (x, y) => {
-    setActiveCellPosition({ x, y });
-  };
-
-  const handleChange = e => {
-    const { name, value } = e.target;
-
-    switch (name) {
-      case 'subject':
-        return setCurrentSubject(value);
-      case 'group':
-        return setCurrentGroup(value);
+  useEffect(() => {
+    if (!group || !subject || !date) {
+      setNotFound(true);
+    } else {
+      axios
+        .get(createQuery(queryString.stringify({ group, subject, date }), '/sheets'))
+        .then(({ data }) => {
+          setSheet(data[0]);
+          setNotFound(false);
+        })
+        .catch(() => setNotFound(true));
     }
-  };
+  }, [group, subject, date]);
 
-  const handleCell = (date, value) => {
-    console.log(getCellValue(value));
-  };
+  useEffect(() => {
+    if (group) {
+      axios
+        .get(createQuery(queryString.stringify({ group, role_like: 'student' }), '/users'))
+        .then(({ data }) => setStudents(data));
+    }
+  }, [group]);
+
+  useEffect(() => {
+    if (sheet) axios.patch(createQuery('', '/sheets/' + sheet?.id), sheet);
+  }, [JSON.stringify(sheet)]);
+
+  const subjectName = useMemo(() => subjects?.find(({ id }) => id === sheet?.subject)?.name, [subjects, sheet]);
+
+  const currentTeacher = useMemo(() => teachers?.find(({ id }) => id === sheet?.teacher), [sheet, teachers]);
+
+  const mutationAllowed = useMemo(() => {
+    if (!sheet && !me) return false;
+
+    if (me?.role.includes('admin')) return true;
+
+    if (sheet.teacher !== undefined && sheet.teacher === me?.id) return true;
+
+    return false;
+  }, [me, sheet]);
+
+  const handleSelect = useCallback(
+    async (student, day, mark) => {
+      if (!sheet || !mutationAllowed) return;
+      if (mark === 'none') {
+        return setSheet({
+          ...sheet,
+          marks: {
+            ...sheet.marks,
+            [day]: [...sheet.marks[day].filter(({ student: studentId }) => studentId !== student)],
+          },
+        });
+      }
+
+      const mutateMark = () => {
+        setSheet({
+          ...sheet,
+          marks: {
+            ...sheet.marks,
+            [day]: [...sheet.marks[day].filter(({ student: studentId }) => studentId !== student), { student, mark }],
+          },
+        });
+      };
+
+      if (!sheet.marks?.[day]) {
+        setSheet({
+          ...sheet,
+          marks: {
+            ...sheet.marks,
+            [day]: [{ student, mark }],
+          },
+        });
+      } else {
+        mutateMark();
+      }
+    },
+    [sheet, mutationAllowed],
+  );
+
+  if (notFound || !sheet) return <div>Not found</div>;
 
   return (
     <div className="page sheet">
-      <div className="sheet-container">
-        <select value={currentSubject} onChange={handleChange} name="subject" id="">
-          {subjects?.map(({ name, id }) => (
-            <option key={id} value={id}>
-              {name}
-            </option>
-          ))}
-        </select>
-        <select value={currentGroup} onChange={handleChange} name="group" id="">
-          {groups?.map(({ name, id }) => (
-            <option key={id} value={id}>
-              {name}
-            </option>
-          ))}
-        </select>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>№</th>
-              <th className="name">ФИО</th>
-              {ITERATION_FILLER.map((day, index) => (
-                <th
-                  className={classnames({ ['active']: highlightCell({ x: index, y: -1 }, activeCellPosition) })}
-                  key={`day-${index + 1}`}
-                >
-                  {index + 1}
-                </th>
-              ))}
-              <th>Всего пропусков</th>
-              <th>Из них прогулов</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!loading &&
-              students?.map(({ id, name }, studentIndex) => (
-                <tr key={id}>
-                  <td
-                    className={classnames({
-                      ['active']: highlightCell({ x: -1, y: studentIndex }, activeCellPosition),
-                    })}
-                  >
-                    {studentIndex + 1}
-                  </td>
-                  <td
-                    className={classnames('name', {
-                      ['active']: highlightCell({ x: -1, y: studentIndex }, activeCellPosition),
-                    })}
-                  >
-                    {name}
-                  </td>
-                  {ITERATION_FILLER.map((dash, dayIndex) => {
-                    const studentsMarks = marks?.filter(({ student }) => student === id) || [];
-                    const currentMark = studentsMarks.find(({ date }) => new Date(date).getDate() === dayIndex + 1);
+      <h3>{[subjectName, currentTeacher?.name, currentTeacher?.login].join(' | ')}</h3>
+      <table className="table">
+        <thead className="table-head">
+          <tr>
+            <th>Студент / День</th>
+            {DAYS.map(day => (
+              <th key={`day-${day}`}>{day}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {students?.map(({ id, name }) => (
+            <tr key={id}>
+              <td className="table-cell-container">
+                <div className="table-cell table-cell-name">{name}</div>
+              </td>
+              {DAYS.map(day => {
+                const mark = sheet?.marks?.[day]?.find(({ student }) => student === id)?.mark;
 
-                    return (
-                      <td
-                        key={id + dayIndex}
-                        className={classnames('mark-cell', {
-                          ['highlighted']: highlightCell({ x: dayIndex, y: studentIndex }, activeCellPosition),
-                          ['active']: activeCell({ x: dayIndex, y: studentIndex }, activeCellPosition),
-                        })}
-                      >
-                        <input
-                          onChange={({ target: { value } }) => handleCell(currentMark?.date, value)}
-                          onFocus={() => handleFocus(dayIndex, studentIndex)}
-                          value={currentMark?.mark === null ? 'нб' : currentMark?.mark}
-                          type="text"
-                        />
-                      </td>
-                    );
-                  })}
-                  <td>{marks?.filter(({ student, mark }) => student === id && mark === null).length * 2}</td>
-                  <td>0</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        {loading && <div className="loading-message">Загрзука</div>}
-      </div>
+                return (
+                  <td className="table-cell-container" key={`${id}-day-${day}`}>
+                    <MarkSelect
+                      disabled={!mutationAllowed}
+                      value={mark}
+                      className={classnames('table-cell', 'table-mark')}
+                      onChange={markValue => handleSelect(id, day, markValue)}
+                    />
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, cloneElement } from 'react';
+import React, { useState, useCallback, cloneElement } from 'react';
 import classnames from 'classnames';
 
 import useModal from 'hooks/useModal';
@@ -21,29 +21,11 @@ const Form = ({
 
   const preventSubmit = e => e.preventDefault();
 
-  const handleSubmit = useCallback(() => onSubmit(form), [form]);
+  const handleSubmit = useCallback(() => onSubmit(form), [JSON.stringify(form)]);
 
-  const handleChange = useCallback(
-    ({ name, value }) => {
-      setForm(prev => ({
-        ...prev,
-        [name]: value,
-      }));
-    },
-    [form],
-  );
-
-  useEffect(() => {
-    const initialValues = { ...form };
-
-    fields.map(({ name, initialValue }) => {
-      if (Object.keys(form).some(key => key === name)) return;
-
-      initialValues[name] = initialValue;
-    });
-
-    setForm(initialValues);
-  }, [fields]);
+  const handleChange = useCallback(({ name, value }) => setForm(prev => ({ ...prev, [name]: value })), [
+    JSON.stringify(form),
+  ]);
 
   return (
     <form className={classnames('form', className)} onSubmit={preventSubmit}>

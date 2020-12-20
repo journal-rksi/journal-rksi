@@ -1,31 +1,21 @@
-import useAxios from 'axios-hooks';
+import axios from 'axios';
 
 import queryString from 'query-string';
 
 import createQuery from 'helpers/createQuery';
 
-const useSubject = ({ groupId, subjectId, date }) => {
+const useSubject = async ({ groupId, subjectId, date }) => {
   const inputDate = new Date(date);
 
-  const [{ data: subject = {}, loading: subjectLoading }] = useAxios(
-    createQuery(queryString.stringify({ id: subjectId }), '/subjects'),
-    {
-      useCache: false,
-    },
+  const { data: subject = {} } = await axios.get(createQuery(queryString.stringify({ id: subjectId }), '/subjects'));
+
+  const { data: group = {} } = await axios.get(createQuery(queryString.stringify({ id: groupId }), '/groups'));
+
+  const { data: students = [] } = await axios.get(
+    createQuery(queryString.stringify({ group: groupId, role_like: 'student' }), '/users'),
   );
-  const [{ data: group = {}, loading: groupLoading }] = useAxios(
-    createQuery(queryString.stringify({ id: groupId }), '/groups'),
-    {
-      useCache: false,
-    },
-  );
-  const [{ data: students = [], loading: studentsLoading }] = useAxios(
-    createQuery(queryString.stringify({ group: groupId }), '/students'),
-    {
-      useCache: false,
-    },
-  );
-  const [{ data: marks = [], loading: marksLoading }] = useAxios(
+
+  const { data: marks = [] } = await axios.get(
     createQuery(
       queryString.stringify({
         student: students?.map(({ id }) => id),
@@ -34,9 +24,6 @@ const useSubject = ({ groupId, subjectId, date }) => {
       }),
       '/marks',
     ),
-    {
-      useCache: false,
-    },
   );
 
   return {
@@ -44,7 +31,6 @@ const useSubject = ({ groupId, subjectId, date }) => {
     students,
     marks,
     group,
-    loading: marksLoading || studentsLoading || groupLoading || subjectLoading,
   };
 };
 

@@ -6,8 +6,8 @@ const options = [];
 
 for (let i = 0; i < 10; i++) {
   options.push({
-    label: new Date().getFullYear() - i,
-    value: new Date().getFullYear() - i,
+    label: (new Date().getFullYear() - i).toString(),
+    value: (new Date().getFullYear() - i).toString(),
   });
 }
 

@@ -11,7 +11,7 @@ const TeacherSelect = ({ name, value, role, label, onChange }) => {
   const { teachers } = useTeachers();
 
   const options = useMemo(() => {
-    const filtered = teachers.filter(({ role: teacherRole }) => {
+    const filtered = teachers?.filter(({ role: teacherRole }) => {
       switch (role) {
         case 'teacher':
           return teacherRole.includes('teacher');
@@ -22,7 +22,7 @@ const TeacherSelect = ({ name, value, role, label, onChange }) => {
       }
     });
 
-    return filtered.map(({ id, name }) => ({ label: name, value: id }));
+    return filtered?.map(({ id, name }) => ({ label: name, value: id }));
   }, [teachers]);
 
   return (

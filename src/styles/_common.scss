@@ -6,18 +6,28 @@
 }
 
 
+html {
+  height: 100%;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   position: relative;
   font-size: 18px;
   font-weight: 300;
   line-height: 21px;
+  height: 100%;
+
+  #root {
+    height: 100%;
+  }
 
   .page {
     overflow: hidden;
     position: relative;
     width: 100%;
     overflow-y: auto;
+    height: 100%;
 
     a {
       display: inline-block;
